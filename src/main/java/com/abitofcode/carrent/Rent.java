@@ -21,5 +21,4 @@ public class Rent {
 
 	private String carNo;
 
-
 }

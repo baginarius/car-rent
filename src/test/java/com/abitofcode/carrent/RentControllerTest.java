@@ -20,43 +20,40 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(RentController.class)
 public class RentControllerTest {
 
-	@Test
-	public void shouldGetRentById() throws Exception {
-		//given
-		Mockito.when(rentService.getRent("1"))
-				.thenReturn(
-						Rent.builder().carNo(CAR_NO).build());
+    private static final String CAR_NO = "123456790";
+    @MockBean
+    private RentService rentService;
+    @Autowired
+    private MockMvc mockMvc;
 
-		//when
-		ResultActions resultActions = mockMvc.perform(
-				get("/rent").param("id", "1"));
+    @Test
+    public void shouldGetRentById() throws Exception {
+        //given
+        Mockito.when(rentService.getRent("1"))
+                .thenReturn(
+                        Rent.builder().carNo(CAR_NO).build());
 
-		//then
-		resultActions.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().string(containsString(CAR_NO)));
-	}
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get("/rent").param("id", "1"));
 
-	@Test
-	public void shouldHandleInvalidId() throws Exception {
-		//given
+        //then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(CAR_NO)));
+    }
 
-		//when
-		ResultActions resultActions = mockMvc.perform(
-				get("/rent").param("id", "1"));
+    @Test
+    public void shouldHandleInvalidId() throws Exception {
+        //given
 
-		//then
-		resultActions.andDo(print())
-				.andExpect(status().isNotFound())
-				.andExpect(content().string(""));
-	}
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get("/rent").param("id", "1"));
 
-	private static final String CAR_NO = "123456790";
-
-	@MockBean
-	private RentService rentService;
-
-	@Autowired
-	private MockMvc mockMvc;
+        //then
+        resultActions.andDo(print()).andExpect(status().isNotFound())
+                .andExpect(content().string(""));
+    }
 
 }
